@@ -23,6 +23,7 @@ def animate(update_func, max_frame, dir_path="./", name="movie.mp4",init_func=No
         update_func(frame)
         plt.savefig(temporary_path + "frame_" + str(frame) + ".jpeg",bbox_inches='tight')
 
+    name = dir_path + name
     if os.path.isfile(name):
         subprocess.run(['rm ' + name], shell=True)
 
