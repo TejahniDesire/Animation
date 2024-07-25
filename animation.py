@@ -14,7 +14,11 @@ def animate(update_func, max_frame, dir_path="./", name="movie.mp4",init_func=No
         print("removing previously existing temp folder")
         subprocess.run(["rm -r " + temporary_path], shell=True)
     subprocess.run(["mkdir " + temporary_path],shell=True)
-    print("subdirectory '{}' made".format(temporary_path))
+
+    if os.path.exists(temporary_path):
+        print("subdirectory '{}' made".format(temporary_path))
+    else: 
+        raise RuntimeError("subdirectory '{}' failed to manifest".format(temporary_path))
 
     for i in range(max_frame):
         frame = i
