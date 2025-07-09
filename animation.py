@@ -5,7 +5,7 @@ import subprocess
 import numpy as np
 
 
-def animate(update_func, max_frame, dir_path="./", name="movie.mp4",init_func=None,speed=15,continuous=False):
+def animate(update_func, max_frame, dir_path="./", name="movie.mp4",init_func=None,speed=15,continuous=False,report_interval=10):
     if init_func is not None:
         init_func()
     temporary_path = dir_path + "animate_frames/"
@@ -29,7 +29,7 @@ def animate(update_func, max_frame, dir_path="./", name="movie.mp4",init_func=No
 
     for i in range(max_frame):
         frame = i
-        if frame % 10 == 0:
+        if frame % report_interval == 0:
             print("Making Frame: ", frame)
 
         frameFileName = temporary_path + "frame_" + str(frame) + ".jpeg"
