@@ -5,18 +5,25 @@ import subprocess
 import numpy as np
 
 
-def animate(update_func, max_frame, dir_path="./", name="movie.mp4",init_func=None,speed=15):
+def animate(update_func, max_frame, dir_path="./", name="movie.mp4",init_func=None,speed=15,continuous=False):
     if init_func is not None:
         init_func()
     temporary_path = dir_path + "animate_frames/"
     isDir = os.path.exists(temporary_path)
+
     if isDir:
-        print("removing previously existing temp folder")
-        subprocess.run(["rm -r " + temporary_path], shell=True)
-    subprocess.run(["mkdir " + temporary_path],shell=True)
+    
+        if (continuous == True):
+            print("temp folder found, continuing")
+        else:
+            print("removing previously existing temp folder")
+            subprocess.run(["rm -r " + temporary_path], shell=True)
+            subprocess.run(["mkdir " + temporary_path],shell=True)
+    else:
+        subprocess.run(["mkdir " + temporary_path],shell=True)
 
     if os.path.exists(temporary_path):
-        print("subdirectory '{}' made".format(temporary_path))
+        print("subdirectory '{}' in hand".format(temporary_path))
     else: 
         raise RuntimeError("subdirectory '{}' failed to manifest".format(temporary_path))
 
@@ -24,8 +31,15 @@ def animate(update_func, max_frame, dir_path="./", name="movie.mp4",init_func=No
         frame = i
         if frame % 10 == 0:
             print("Making Frame: ", frame)
+
+        frameFileName = temporary_path + "frame_" + str(frame) + ".jpeg"
+
+        if (os.path.isfile(frameFileName)) and (continuous == True):
+            print("Frame jpeg for frame {} already exist, skipping...".format(frame))
+            continue
+
         update_func(frame)
-        plt.savefig(temporary_path + "frame_" + str(frame) + ".jpeg",bbox_inches='tight')
+        plt.savefig(frameFileName,bbox_inches='tight')
 
     name = dir_path + name
     if os.path.isfile(name):
